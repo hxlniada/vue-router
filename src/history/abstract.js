@@ -22,6 +22,12 @@ export class AbstractHistory extends History {
   }
 
   replace (location: RawLocation, onComplete?: Function, onAbort?: Function) {
+    if (typeof location === 'string') {
+      location = { path: location }
+    }
+    if (typeof location === 'object' && !location.replace) {
+      (location: Object).replace = true
+    }
     this.transitionTo(location, route => {
       this.stack = this.stack.slice(0, this.index).concat(route)
       onComplete && onComplete(route)
